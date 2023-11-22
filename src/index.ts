@@ -1,13 +1,16 @@
 import { Hono } from 'hono';
 import { poweredBy } from 'hono/powered-by';
 import { prettyJSON } from 'hono/pretty-json';
+import { cors } from 'hono/cors';
 
 import { Bindings } from './_utils';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
+app.use('*', cors()); // TODO: Add origin allowlist
 app.use('*', poweredBy());
 app.use('*', prettyJSON());
+
 app.notFound((c) => c.json({ message: 'Not Found', ok: false }, 404));
 
 app.get('/', (c) => c.text('Yo!'));
