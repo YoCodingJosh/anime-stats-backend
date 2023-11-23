@@ -5,6 +5,8 @@ import { cors } from 'hono/cors';
 
 import { Bindings } from './_utils';
 
+import api from './api';
+
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.use('*', cors()); // TODO: Add origin allowlist
@@ -28,5 +30,7 @@ app.get('/health', async (c) => {
     return new Response('MyAnimeList is unavailable', { status: response.status });
   }
 });
+
+app.route('/api', api);
 
 export default app;
