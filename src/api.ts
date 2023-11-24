@@ -19,10 +19,14 @@ app.get('/:username', async (c) => {
   // you can get the user's anime list by username anonymously, but you have to OAuth to get their profile info.
   // so we'll just use jikan.moe's API instead.
   const response = await (await fetch(`https://api.jikan.moe/v4/users/${username}`)).json();
+
   return c.json(response, 200);
 });
 
-app.get('/:username/raw-stats', (c) => c.json("gets the user's raw stats", 200));
+app.get('/:username/raw-stats', async (c) => {
+  return c.json("gets the user's raw stats", 200);
+});
+
 app.post('/:username/crunch', (c) => c.json(`crunch ${c.req.param('username')}'s stats`, 200));
 
 export default app;
