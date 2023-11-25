@@ -1,5 +1,5 @@
 import { Context, Hono } from 'hono';
-import { WatchlistEndpointResponse } from './schema';
+import { JikanErrorResponse, JikanUserResponse, WatchlistEndpointResponse } from './schema';
 
 const app = new Hono();
 
@@ -19,7 +19,15 @@ app.get('/:username', async (c) => {
   // MAL's API is still kinda dumb:
   // you can get the user's anime list by username anonymously, but you have to OAuth to get their profile info.
   // so we'll just use jikan.moe's API instead.
-  const response = await (await fetch(`https://api.jikan.moe/v4/users/${username}`)).json();
+  const response = await (await fetch(`https://api.jikan.moe/v4/users/${username}`)).json() as JikanUserResponse | JikanErrorResponse;
+
+  if ('error' in response) {
+    if (response.status === 404) {
+      return c.json({ message: 'User not found', ok: false }, 404);
+    } else {
+      return c.json({ message: response.message, ok: false }, 500);
+    }
+  }
 
   return c.json(response, 200);
 });

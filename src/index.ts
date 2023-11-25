@@ -3,9 +3,9 @@ import { poweredBy } from 'hono/powered-by';
 import { prettyJSON } from 'hono/pretty-json';
 import { cors } from 'hono/cors';
 
-import { Bindings } from './_utils';
-
 import api from './api';
+
+import { Bindings } from './schema';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
