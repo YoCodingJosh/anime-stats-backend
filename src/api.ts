@@ -35,10 +35,11 @@ app.get('/:username', async (c) => {
 app.get('/:username/raw-data', async (c) => {
   const username = c.req.param('username');
 
-  const url = `https://api.myanimelist.net/v2/users/${username}/animelist?fields=id,title,main_picture,
-  start_date,end_date,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,updated_at,media_type,
-  status,genres,my_list_status,num_episodes,start_season,source,average_episode_duration,rating,pictures,
-  related_anime,studios,statistics&limit=1000&nsfw=true`;
+  // Get's the user's anime list along with extensive details about each anime.
+  const url = `https://api.myanimelist.net/v2/users/${username}/animelist?fields=id,title,main_picture,start_date,
+  end_date,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,
+  list_status,num_episodes,start_season,source,average_episode_duration,rating,pictures,related_anime,studios,statistics
+  &limit=1000&nsfw=true`;
 
   const response = await malFetch<WatchlistEndpointResponse>(url, c);
 

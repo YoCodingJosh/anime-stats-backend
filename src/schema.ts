@@ -2,25 +2,17 @@
 
 export type ItemStatus = 'watching' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_watch';
 
-export interface ListStatus {
-  status: ItemStatus;
-  score: number;
-  num_episodes_watched: number;
-  is_rewatching: boolean;
-  updated_at: string;
-  priority: number;
-  num_times_rewatched: number;
-  rewatch_value: number;
-  tags: string[];
-  comments: string;
-};
-
 export interface WatchlistEndpointResponseListStatus {
   status: ItemStatus;
   score: number;
   num_episodes_watched: number;
   is_rewatching: boolean;
   updated_at: string;
+  priority?: number;
+  num_times_rewatched?: number;
+  rewatch_value?: number;
+  tags?: string[];
+  comments?: string;
 };
 
 export interface WatchlistEndpointResponseNode {
@@ -30,6 +22,34 @@ export interface WatchlistEndpointResponseNode {
     medium: string;
     large: string;
   };
+  start_date: string;
+  end_date: string;
+  mean: number;
+  rank: number;
+  popularity: number;
+  num_list_users: number;
+  num_scoring_users: number;
+  nsfw: string;
+  created_at: string;
+  updated_at: string;
+  media_type: string;
+  status: string;
+  genres: {
+    id: number;
+    name: string;
+  }[];
+  num_episodes: number;
+  start_season: {
+    year: number;
+    season: string;
+  };
+  source: string;
+  average_episode_duration: number;
+  rating: string;
+  studios: {
+    id: number;
+    name: string;
+  }[];
 };
 
 export interface WatchlistEndpointResponseData {
