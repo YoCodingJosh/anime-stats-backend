@@ -95,3 +95,7 @@ export interface JikanUserResponse {
 export type Bindings = {
   MAL_CLIENT_ID: string,
 };
+
+export interface WatchlistDataRequest {
+  data: WatchlistEndpointResponseData[];
+}
