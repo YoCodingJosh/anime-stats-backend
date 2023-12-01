@@ -8,11 +8,16 @@ export interface BasicStats {
   totalDuration: number;
   totalAnime: number;
   totalEpisodes: number;
+
   totalMovies: number;
   totalOVA: number;
   totalONA: number;
   totalSpecial: number;
   totalTV: number;
+  totalMusic: number;
+
+  averageScore: number;
+
   completed: {
     count: number;
     totalDuration: number;
@@ -31,7 +36,6 @@ export interface BasicStats {
   planToWatch: {
     count: number;
     totalDuration: number;
-    averageScore: number;
   };
   watching: {
     count: number;
@@ -40,9 +44,7 @@ export interface BasicStats {
   };
 }
 
-export function getBasicStats(
-  watchlist: WatchlistDataRequest
-): BasicStats {
+export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
   const basicStats: BasicStats = {
     totalDuration: 0,
     totalAnime: 0,
@@ -52,6 +54,8 @@ export function getBasicStats(
     totalONA: 0,
     totalSpecial: 0,
     totalTV: 0,
+    totalMusic: 0,
+    averageScore: 0,
     completed: {
       count: 0,
       totalDuration: 0,
@@ -70,7 +74,6 @@ export function getBasicStats(
     planToWatch: {
       count: 0,
       totalDuration: 0,
-      averageScore: 0,
     },
     watching: {
       count: 0,
@@ -78,6 +81,9 @@ export function getBasicStats(
       averageScore: 0,
     },
   };
+
+  // This is used to calculate the average score for all anime that have been scored and not plan to watch
+  let averageScoreEligibleAnimeCount = 0;
 
   watchlist.data.forEach((item) => {
     const { list_status: listStatus, node } = item;
@@ -88,63 +94,73 @@ export function getBasicStats(
       num_episodes_watched: numEpisodesWatched,
     } = listStatus;
 
+    if (status !== "plan_to_watch" && score !== 0) {
+      basicStats.averageScore += score;
+      averageScoreEligibleAnimeCount++;
+    }
+
     const duration = numEpisodesWatched * node.average_episode_duration;
 
     basicStats.totalDuration += duration;
-    basicStats.totalAnime += 1;
+    basicStats.totalAnime++;
     basicStats.totalEpisodes += numEpisodes;
 
     switch (mediaType) {
       case "movie":
-        basicStats.totalMovies += 1;
+        basicStats.totalMovies++;
         break;
       case "ova":
-        basicStats.totalOVA += 1;
+        basicStats.totalOVA++;
         break;
       case "ona":
-        basicStats.totalONA += 1;
+        basicStats.totalONA++;
         break;
       case "special":
-        basicStats.totalSpecial += 1;
+        basicStats.totalSpecial++;
         break;
       case "tv":
-        basicStats.totalTV += 1;
+        basicStats.totalTV++;
+        break;
+      case "music":
+        basicStats.totalMusic++;
         break;
     }
 
     switch (status) {
       case "completed":
-        basicStats.completed.count += 1;
+        basicStats.completed.count++;
         basicStats.completed.totalDuration += duration;
         basicStats.completed.averageScore += score;
         break;
       case "dropped":
-        basicStats.dropped.count += 1;
+        basicStats.dropped.count++;
         basicStats.dropped.totalDuration += duration;
         basicStats.dropped.averageScore += score;
         break;
       case "on_hold":
-        basicStats.onHold.count += 1;
+        basicStats.onHold.count++;
         basicStats.onHold.totalDuration += duration;
         basicStats.onHold.averageScore += score;
         break;
       case "plan_to_watch":
-        basicStats.planToWatch.count += 1;
+        basicStats.planToWatch.count++;
         basicStats.planToWatch.totalDuration += duration;
-        basicStats.planToWatch.averageScore += score;
         break;
       case "watching":
-        basicStats.watching.count += 1;
+        basicStats.watching.count++;
         basicStats.watching.totalDuration += duration;
         basicStats.watching.averageScore += score;
         break;
     }
   });
 
+  console.log(averageScoreEligibleAnimeCount);
+
+  basicStats.averageScore /= averageScoreEligibleAnimeCount;
+
   basicStats.completed.averageScore /= basicStats.completed.count;
   basicStats.dropped.averageScore /= basicStats.dropped.count;
   basicStats.onHold.averageScore /= basicStats.onHold.count;
-  basicStats.planToWatch.averageScore /= basicStats.planToWatch.count;
   basicStats.watching.averageScore /= basicStats.watching.count;
 
   return basicStats;
