@@ -9,16 +9,30 @@ import { runDefaultStats, availableStats } from "./stats";
 
 const app = new Hono();
 
-const malFetch = async <T>(url: string, c: Context) => {
+interface MALResponse<T> {
+  data?: T;
+  response: {
+    status: number;
+  }
+}
+
+const malFetch = async <T>(url: string, c: Context): Promise<MALResponse<T>> => {
   const response = await fetch(url, {
     headers: { "X-MAL-CLIENT-ID": c.env.MAL_CLIENT_ID },
   });
 
+  let malResponse: MALResponse<T> = {
+    data: undefined,
+    response: {
+      status: response.status
+    }
+  };
+
   if (response.ok) {
-    return await response.json<T>();
-  } else {
-    throw new Error(`MyAnimeList returned ${response.status}`);
+    malResponse.data = await response.json() as T;
   }
+
+  return malResponse;
 };
 
 app.get("/:username", async (c) => {
@@ -51,9 +65,15 @@ app.get("/:username/raw-data", async (c) => {
   list_status,num_episodes,start_season,source,average_episode_duration,rating,pictures,related_anime,studios,statistics
   &limit=1000&nsfw=true`;
 
-  const response = await malFetch<WatchlistEndpointResponse>(url, c);
+  const watchlistResponse = await malFetch<WatchlistEndpointResponse>(url, c);
 
-  const watchlistData: WatchlistEndpointResponse[] = [response];
+  // if the response is a 403, it means the user's list is private.
+  // we'll just return an empty list with a 403 status code.
+  if (watchlistResponse.response.status === 403) {
+    return c.json({ data: [], message: "user's list might be private" }, 403);
+  }
+
+  const watchlistData: WatchlistEndpointResponse[] = [watchlistResponse.data!];
 
   while (watchlistData[watchlistData.length - 1].paging.next) {
     const nextResponse = await malFetch<WatchlistEndpointResponse>(
@@ -61,7 +81,7 @@ app.get("/:username/raw-data", async (c) => {
       c
     );
 
-    watchlistData.push(nextResponse);
+    watchlistData.push(nextResponse.data!);
   }
 
   const watchlist = watchlistData.flatMap((d) => d.data);
