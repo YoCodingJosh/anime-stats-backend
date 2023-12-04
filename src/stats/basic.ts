@@ -154,8 +154,6 @@ export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
     }
   });
 
-  console.log(averageScoreEligibleAnimeCount);
-
   basicStats.averageScore /= averageScoreEligibleAnimeCount;
 
   basicStats.completed.averageScore /= basicStats.completed.count;

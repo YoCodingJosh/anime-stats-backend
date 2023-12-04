@@ -18,8 +18,6 @@ app.notFound((c) => c.json({ message: 'Not Found', ok: false }, 404));
 app.get('/', (c) => c.text('Yo!'));
 
 app.get('/health', async (c) => {
-  console.log(c.env.MAL_CLIENT_ID);
-
   const response = await fetch('https://api.myanimelist.net/v2/anime/21273',
     { headers: { 'X-MAL-CLIENT-ID': c.env.MAL_CLIENT_ID } }
   );
