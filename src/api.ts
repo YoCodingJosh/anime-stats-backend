@@ -62,8 +62,8 @@ app.get("/:username/raw-data", async (c) => {
   // Get's the user's anime list along with extensive details about each anime.
   const url = `https://api.myanimelist.net/v2/users/${username}/animelist?fields=id,title,main_picture,start_date,
   end_date,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,
-  list_status,num_episodes,start_season,source,average_episode_duration,rating,pictures,related_anime,studios,statistics
-  &limit=1000&nsfw=true`;
+  list_status{is_rewatching,num_times_rewatched,rewatch_value},num_episodes,start_season,source,
+  average_episode_duration,rating,pictures,related_anime,studios,statistics&limit=1000&nsfw=true`;
 
   const watchlistResponse = await malFetch<WatchlistEndpointResponse>(url, c);
 

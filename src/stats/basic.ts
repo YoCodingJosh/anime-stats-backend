@@ -9,6 +9,10 @@ export interface BasicStats {
   totalAnime: number;
   totalEpisodes: number;
 
+  rewatchedAnime: number;
+  rewatchedEpisodes: number;
+  rewatchedDuration: number;
+
   totalMovies: number;
   totalOVA: number;
   totalONA: number;
@@ -49,6 +53,9 @@ export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
     totalDuration: 0,
     totalAnime: 0,
     totalEpisodes: 0,
+    rewatchedAnime: 0,
+    rewatchedEpisodes: 0,
+    rewatchedDuration: 0,
     totalMovies: 0,
     totalOVA: 0,
     totalONA: 0,
@@ -87,11 +94,11 @@ export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
 
   watchlist.data.forEach((item) => {
     const { list_status: listStatus, node } = item;
-    const { media_type: mediaType, num_episodes: numEpisodes } = node;
+    const { media_type: mediaType } = node;
     const {
       status,
       score,
-      num_episodes_watched: numEpisodesWatched,
+      num_episodes_watched,
     } = listStatus;
 
     if (status !== "plan_to_watch" && score !== 0) {
@@ -99,11 +106,28 @@ export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
       averageScoreEligibleAnimeCount++;
     }
 
-    const duration = numEpisodesWatched * node.average_episode_duration;
+    let duration = 0;
+
+    basicStats.totalAnime++;
+
+    if (listStatus.is_rewatching) {
+      basicStats.rewatchedEpisodes += num_episodes_watched;
+      basicStats.rewatchedDuration += node.average_episode_duration * num_episodes_watched;
+      basicStats.totalEpisodes += node.num_episodes;
+
+      duration = node.average_episode_duration * node.num_episodes;
+    } else {
+      duration = node.average_episode_duration * num_episodes_watched;
+      basicStats.totalEpisodes += num_episodes_watched;
+    }
 
     basicStats.totalDuration += duration;
-    basicStats.totalAnime++;
-    basicStats.totalEpisodes += numEpisodes;
+
+    if (listStatus.num_times_rewatched && listStatus.num_times_rewatched >= 1) {
+      basicStats.rewatchedAnime += listStatus.num_times_rewatched;
+      basicStats.rewatchedEpisodes += node.num_episodes * (listStatus.num_times_rewatched);
+      basicStats.rewatchedDuration += node.average_episode_duration * (listStatus.num_times_rewatched) * node.num_episodes;
+    }
 
     switch (mediaType) {
       case "movie":
