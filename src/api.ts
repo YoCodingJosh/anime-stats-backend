@@ -5,7 +5,7 @@ import {
   WatchlistDataRequest,
   WatchlistEndpointResponse,
 } from "./schema";
-import { runDefaultStats, availableStats } from "./stats";
+import { runDefaultStats, availableStats, runStats } from "./stats";
 
 const app = new Hono();
 
@@ -39,7 +39,7 @@ app.get("/:username", async (c) => {
   const username = c.req.param("username");
 
   // MAL's API is still kinda dumb:
-  // you can get the user's anime list by username anonymously, but you have to OAuth to get their profile info.
+  // you can get the user's anime list by username anonymously, but you have to OAuth to get their public profile info.
   // so we'll just use jikan.moe's API instead.
   const response = (await (
     await fetch(`https://api.jikan.moe/v4/users/${username}`)
@@ -59,7 +59,7 @@ app.get("/:username", async (c) => {
 app.get("/:username/raw-data", async (c) => {
   const username = c.req.param("username");
 
-  // Get's the user's anime list along with extensive details about each anime.
+  // Gets the user's anime list along with extensive details about each anime.
   const url = `https://api.myanimelist.net/v2/users/${username}/animelist?fields=id,title,main_picture,start_date,
   end_date,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,
   list_status{is_rewatching,num_times_rewatched,rewatch_value},num_episodes,start_season,source,
@@ -96,13 +96,10 @@ app.post("/:username/stats", async (c) => {
 
   const stats = runDefaultStats(watchlist);
 
-  return c.json(
-    {
-      stats,
-      availableStats: availableStats.map((stat) => stat.id),
-    },
-    200
-  );
+  return c.json({
+    stats,
+    availableStats: availableStats.map((stat) => stat.id),
+  }, 200);
 });
 
 app.post("/:username/stats/:id", async (c) => {
@@ -110,7 +107,11 @@ app.post("/:username/stats/:id", async (c) => {
     data: await c.req.json(),
   };
 
-  return c.json(`get ${c.req.param("username")}'s stats`, 200);
+  const stats = runStats(watchlist, [c.req.param("id")]);
+
+  return c.json({
+    stats,
+  }, 200);
 });
 
 export default app;

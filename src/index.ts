@@ -23,7 +23,7 @@ app.get('/health', async (c) => {
   );
 
   if (response.ok) {
-    return c.json({ ok: true, services: ['mal']});
+    return c.json({ ok: true, services: ['mal'] });
   } else {
     return new Response('MyAnimeList is unavailable', { status: response.status });
   }

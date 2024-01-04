@@ -92,10 +92,13 @@ export interface JikanUserResponse {
   }
 }
 
-export type Bindings = {
-  MAL_CLIENT_ID: string,
-};
-
 export interface WatchlistDataRequest {
   data: WatchlistEndpointResponseData[];
 }
+
+// Environment variables bindings
+
+export type Bindings = {
+  MAL_CLIENT_ID: string,
+  __DEV__: boolean,
+};

@@ -1,5 +1,7 @@
 import { WatchlistDataRequest } from "../schema";
+
 import { getBasicStats } from "./basic";
+import { getUnpopularOpinion } from "./unpopular_opinion";
 
 export interface Stat {
   /**
@@ -27,7 +29,12 @@ export interface Stat {
  * An array of all available stats (excluding the basic stats since that gets sent by default)
  */
 export const availableStats: Stat[] = [
-
+  {
+    id: "9D469D37-6E05-4CFF-90A3-54C36593E717",
+    name: "Unpopular Opinions",
+    description: "your unpopular opinions - real hot takes",
+    calculate: getUnpopularOpinion,
+  }
 ];
 
 /**
@@ -44,4 +51,14 @@ export const defaultStats: Stat[] = [
 
 export function runDefaultStats(watchlist: WatchlistDataRequest): any[] {
   return defaultStats.map((stat) => stat.calculate(watchlist));
+}
+
+export function runStats(watchlist: WatchlistDataRequest, stats: string[]): any[] {
+  const statsToRun = stats.map((stat) => availableStats.find((s) => s.id === stat));
+
+  if (statsToRun.length === 0 || statsToRun.some((stat) => stat === undefined)) {
+    throw new Error("Invalid stat ID");
+  } else {
+    return statsToRun.map((stat) => stat!.calculate(watchlist));
+  }
 }
