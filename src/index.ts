@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { poweredBy } from 'hono/powered-by';
 import { prettyJSON } from 'hono/pretty-json';
 import { cors } from 'hono/cors';
+import { csrf } from 'hono/csrf';
 
 import api from './api';
 
@@ -10,6 +11,7 @@ import { Bindings } from './schema';
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.use('*', cors()); // TODO: Add origin allowlist
+app.use('*', csrf());
 app.use('*', poweredBy());
 app.use('*', prettyJSON());
 

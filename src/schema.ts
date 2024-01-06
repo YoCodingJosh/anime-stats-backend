@@ -1,6 +1,7 @@
 // MAL API Schema
 
 export type ItemStatus = 'watching' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_watch';
+export type MediaType = 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music';
 
 export interface WatchlistEndpointResponseListStatus {
   status: ItemStatus;
@@ -32,7 +33,7 @@ export interface WatchlistEndpointResponseNode {
   nsfw: string;
   created_at: string;
   updated_at: string;
-  media_type: string;
+  media_type: MediaType;
   status: string;
   genres: {
     id: number;

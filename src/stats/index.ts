@@ -2,6 +2,7 @@ import { WatchlistDataRequest } from "../schema";
 
 import { getBasicStats } from "./basic";
 import { getUnpopularOpinion } from "./unpopular_opinion";
+import { getStudioStats } from "./studios";
 
 export interface Stat {
   /**
@@ -34,7 +35,13 @@ export const availableStats: Stat[] = [
     name: "Unpopular Opinions",
     description: "your unpopular opinions - real hot takes",
     calculate: getUnpopularOpinion,
-  }
+  },
+  {
+    id: "2ACC47A3-EB04-4C9B-BBC2-B7F559F14f8A",
+    name: "Studios",
+    description: "your favorite studios",
+    calculate: getStudioStats,
+  },
 ];
 
 /**

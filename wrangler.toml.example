@@ -1,5 +1,5 @@
 name = "anime-stats-backend"
-compatibility_date = "2023-12-01"
+compatibility_date = "2023-12-15"
 
 [vars]
 MAL_CLIENT_ID = "mal client id goes here"
