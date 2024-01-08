@@ -37,7 +37,7 @@ export const availableStats: Stat[] = [
     calculate: getUnpopularOpinion,
   },
   {
-    id: "2ACC47A3-EB04-4C9B-BBC2-B7F559F14f8A",
+    id: "2ACC47A3-EB04-4C9B-BBC2-B7F559F14F8A",
     name: "Studios",
     description: "your favorite studios",
     calculate: getStudioStats,

@@ -5,14 +5,19 @@
 import { WatchlistDataRequest, WatchlistEndpointResponseData } from "../schema";
 
 type Studio = {
+  // studio ID in MAL
   id: number;
+
+  // studio name
   name: string;
+
+  // most popular anime by this studio
   anime?: WatchlistEndpointResponseData[];
 };
 
 export interface StudioStats {
-  mostWatched: WatchlistEndpointResponseData[] | null,
-  highestRated: WatchlistEndpointResponseData[] | null,
+  mostWatched: Studio[] | null,
+  highestRated: Studio[] | null,
   message?: string,
 };
 
@@ -33,7 +38,6 @@ export function getStudioStats(watchlist: WatchlistDataRequest): StudioStats {
     return acc;
   }, {});
 
-  // dedupe the studios
   const uniqueStudios = studios.filter((studio, index) => studios.findIndex((s) => s.id === studio.id) === index);
 
   return studioStats;
