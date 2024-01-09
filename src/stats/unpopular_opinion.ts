@@ -50,6 +50,7 @@ export function getUnpopularOpinion(watchlist: WatchlistDataRequest): UnpopularO
   unpopularOpinion.lower = scoreDeviations.filter((item) => item.list_status.score < item.node.mean).slice(0, 25);
 
   // TODO: since on MAL, specials and OVAs are always scored lower than the main series, should we filter them out?
+  // It does look like they do this on MAL.
 
   return unpopularOpinion;
 }
