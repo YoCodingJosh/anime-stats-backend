@@ -28,7 +28,7 @@ app.get('/health', async (c) => {
     return c.json({ ok: true, services: ['mal'] });
   } else {
     // I know that I should return a 503 (or whatever MAL sends us), but I don't want to signal to the frontend that the service is unavailable
-    return new Response(`MyAnimeList is unavailable: ${response.status}, ${response.statusText}`, { status: 200 });
+    return c.json({ ok: false, services: [], message: `MAL is unavailable: ${response.status}` });
   }
 });
 
