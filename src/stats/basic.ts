@@ -5,6 +5,8 @@
 import { WatchlistDataRequest } from "../schema";
 
 export interface BasicStats {
+  grandTotalDuration: number;
+
   totalDuration: number;
   totalAnime: number;
   totalEpisodes: number;
@@ -50,6 +52,7 @@ export interface BasicStats {
 
 export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
   const basicStats: BasicStats = {
+    grandTotalDuration: 0,
     totalDuration: 0,
     totalAnime: 0,
     totalEpisodes: 0,
@@ -184,6 +187,8 @@ export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
   basicStats.dropped.averageScore /= basicStats.dropped.count;
   basicStats.onHold.averageScore /= basicStats.onHold.count;
   basicStats.watching.averageScore /= basicStats.watching.count;
+
+  basicStats.grandTotalDuration = basicStats.totalDuration + basicStats.rewatchedDuration;
 
   return basicStats;
 }
