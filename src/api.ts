@@ -94,7 +94,7 @@ app.post("/:username/stats", async (c) => {
     data: await c.req.json(),
   };
 
-  const stats = runDefaultStats(watchlist);
+  const stats = await runDefaultStats(watchlist);
 
   return c.json({
     stats,
@@ -107,7 +107,7 @@ app.post("/:username/stats/:id", async (c) => {
     data: await c.req.json(),
   };
 
-  const stats = runStats(watchlist, [c.req.param("id")]);
+  const stats = await runStats(watchlist, [c.req.param("id")]);
 
   return c.json({
     stats,

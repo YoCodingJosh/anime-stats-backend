@@ -23,7 +23,7 @@ export interface Stat {
   /**
    * A function that takes in the user's watchlist and returns the value of the stat.
    */
-  calculate: (watchlist: WatchlistDataRequest) => any;
+  calculate: (watchlist: WatchlistDataRequest) => Promise<any>;
 }
 
 /**
@@ -42,6 +42,12 @@ export const availableStats: Stat[] = [
     description: "your favorite studios",
     calculate: getStudioStats,
   },
+  {
+    id: "7DCDD014-1B7E-4EE9-A7DA-2BFD1C0FB93A",
+    name: "Hentai Alert!",
+    description: "how much (if any) hentai you've watched",
+    calculate: async () => {},
+  },
 ];
 
 /**
@@ -56,16 +62,16 @@ export const defaultStats: Stat[] = [
   },
 ];
 
-export function runDefaultStats(watchlist: WatchlistDataRequest): any[] {
-  return defaultStats.map((stat) => stat.calculate(watchlist));
+export async function runDefaultStats(watchlist: WatchlistDataRequest): Promise<any[]> {
+  return await Promise.all(defaultStats.map((stat) => stat.calculate(watchlist)));
 }
 
-export function runStats(watchlist: WatchlistDataRequest, stats: string[]): any[] {
+export async function runStats(watchlist: WatchlistDataRequest, stats: string[]): Promise<any[]> {
   const statsToRun = stats.map((stat) => availableStats.find((s) => s.id === stat));
 
   if (statsToRun.length === 0 || statsToRun.some((stat) => stat === undefined)) {
     throw new Error("Invalid stat ID");
   } else {
-    return statsToRun.map((stat) => stat!.calculate(watchlist));
+    return await Promise.all(statsToRun.map((stat) => stat!.calculate(watchlist)));
   }
 }

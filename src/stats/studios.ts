@@ -21,7 +21,7 @@ export interface StudioStats {
   message?: string,
 };
 
-export function getStudioStats(watchlist: WatchlistDataRequest): StudioStats {
+export async function getStudioStats(watchlist: WatchlistDataRequest): Promise<StudioStats> {
   const studioStats: StudioStats = {
     mostWatched: null,
     highestRated: null,

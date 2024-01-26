@@ -50,7 +50,7 @@ export interface BasicStats {
   };
 }
 
-export function getBasicStats(watchlist: WatchlistDataRequest): BasicStats {
+export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<BasicStats> {
   const basicStats: BasicStats = {
     grandTotalDuration: 0,
     totalDuration: 0,

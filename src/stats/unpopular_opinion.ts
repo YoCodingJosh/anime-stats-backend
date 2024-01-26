@@ -9,7 +9,7 @@ export interface UnpopularOpinion {
   message?: string,
 };
 
-export function getUnpopularOpinion(watchlist: WatchlistDataRequest): UnpopularOpinion {
+export async function getUnpopularOpinion(watchlist: WatchlistDataRequest): Promise<UnpopularOpinion> {
   const unpopularOpinion: UnpopularOpinion = {
     higher: null,
     lower: null,
