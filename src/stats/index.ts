@@ -75,3 +75,7 @@ export async function runStats(watchlist: WatchlistDataRequest, stats: string[])
     return await Promise.all(statsToRun.map((stat) => stat!.calculate(watchlist)));
   }
 }
+
+export async function runAllStats(watchlist: WatchlistDataRequest): Promise<any[]> {
+  return await Promise.all([...defaultStats, ...availableStats].map((stat) => stat.calculate(watchlist)));
+}
