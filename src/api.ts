@@ -5,7 +5,7 @@ import {
   WatchlistDataRequest,
   WatchlistEndpointResponse,
 } from "./schema";
-import { availableStats, runStats, runAllStats } from "./stats";
+import { runStats, runAllStats, allStats } from "./stats";
 
 const app = new Hono();
 
@@ -97,8 +97,8 @@ app.post("/:username/stats", async (c) => {
   const stats = await runAllStats(watchlist);
 
   return c.json({
-    stats,
-    availableStats: availableStats.map((stat) => stat.id),
+    stats: Object.fromEntries(stats),
+    availableStats: allStats.map((stat) => stat.id),
   }, 200);
 });
 

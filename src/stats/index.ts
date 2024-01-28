@@ -62,6 +62,11 @@ export const defaultStats: Stat[] = [
   },
 ];
 
+/**
+ * An array of all stats.
+ */
+export const allStats = [...defaultStats, ...availableStats];
+
 export async function runDefaultStats(watchlist: WatchlistDataRequest): Promise<any[]> {
   return await Promise.all(defaultStats.map((stat) => stat.calculate(watchlist)));
 }
@@ -76,6 +81,14 @@ export async function runStats(watchlist: WatchlistDataRequest, stats: string[])
   }
 }
 
-export async function runAllStats(watchlist: WatchlistDataRequest): Promise<any[]> {
-  return await Promise.all([...defaultStats, ...availableStats].map((stat) => stat.calculate(watchlist)));
+export async function runAllStats(watchlist: WatchlistDataRequest): Promise<any> {
+  let results = new Map<string, any>();
+
+  const defaultResults = await Promise.all(defaultStats.map((stat) => stat.calculate(watchlist)));
+  defaultStats.forEach((stat, index) => results.set(stat.id, defaultResults[index]));
+
+  const availableResults = await Promise.all(availableStats.map((stat) => stat.calculate(watchlist)));
+  availableStats.forEach((stat, index) => results.set(stat.id, availableResults[index]));
+
+  return results;
 }
