@@ -19,7 +19,7 @@ type Studio = {
 };
 
 export interface StudioStats {
-  anime: any[];
+  anime: any[] | null;
   mostWatched: Studio[] | null,
   highestRated: Studio[] | null,
   longestWatched: Studio[] | null,
@@ -28,7 +28,7 @@ export interface StudioStats {
 
 export async function getStudioStats(watchlist: WatchlistDataRequest): Promise<StudioStats> {
   const studioStats: StudioStats = {
-    anime: [],
+    anime: null,
     mostWatched: null,
     highestRated: null,
     longestWatched: null,
@@ -81,8 +81,15 @@ export async function getStudioStats(watchlist: WatchlistDataRequest): Promise<S
   //     meanScore,
   //   };
   // });
+  
+  studioStats.anime = Array.from(studioAnimeMapping.entries()).map(([id, anime]) => {
+    const studio = studioStats.mostWatched!.find((studio) => studio.id === id)!;
 
-  studioStats.anime = Object.values(studioStats.anime);
+    return {
+      ...studio,
+      anime,
+    };
+  });
 
   return studioStats;
 }
