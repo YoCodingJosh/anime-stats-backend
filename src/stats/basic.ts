@@ -21,6 +21,7 @@ export interface BasicStats {
   totalSpecial: number;
   totalTV: number;
   totalMusic: number;
+  totalPV: number;
 
   averageScore: number;
 
@@ -65,6 +66,7 @@ export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<Ba
     totalSpecial: 0,
     totalTV: 0,
     totalMusic: 0,
+    totalPV: 0,
     averageScore: 0,
     completed: {
       count: 0,
@@ -150,6 +152,9 @@ export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<Ba
         break;
       case "music":
         basicStats.totalMusic++;
+        break;
+      case "pv":
+        basicStats.totalPV++;
         break;
     }
 

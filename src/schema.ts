@@ -1,7 +1,7 @@
 // MAL API Schema
 
 export type ItemStatus = 'watching' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_watch';
-export type MediaType = 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music';
+export type MediaType = 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music' | 'pv';
 
 export interface WatchlistEndpointResponseListStatus {
   status: ItemStatus;
