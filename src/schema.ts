@@ -1,7 +1,9 @@
 // MAL API Schema
 
 export type ItemStatus = 'watching' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_watch';
-export type MediaType = 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music' | 'pv';
+export type AnimeStatus = 'finished_airing' | 'currently_airing' | 'not_yet_aired' | 'cancelled';
+export type MediaType = 'tv' | 'ova' | 'movie' | 'special' | 'ona' | 'music' | 'pv' | 'cm' | 'tv_special';
+export type NsfwStatus = 'white' | 'gray' | 'black';
 
 export interface WatchlistEndpointResponseListStatus {
   status: ItemStatus;
@@ -30,11 +32,11 @@ export interface WatchlistEndpointResponseNode {
   popularity: number;
   num_list_users: number;
   num_scoring_users: number;
-  nsfw: string;
+  nsfw: NsfwStatus;
   created_at: string;
   updated_at: string;
   media_type: MediaType;
-  status: string;
+  status: AnimeStatus;
   genres: {
     id: number;
     name: string;

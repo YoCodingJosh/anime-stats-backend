@@ -22,6 +22,8 @@ export interface BasicStats {
   totalTV: number;
   totalMusic: number;
   totalPV: number;
+  totalTVSpecial: number;
+  totalCM: number;
 
   averageScore: number;
 
@@ -67,6 +69,8 @@ export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<Ba
     totalTV: 0,
     totalMusic: 0,
     totalPV: 0,
+    totalTVSpecial: 0,
+    totalCM: 0,
     averageScore: 0,
     completed: {
       count: 0,
@@ -156,6 +160,12 @@ export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<Ba
       case "pv":
         basicStats.totalPV++;
         break;
+      case "tv_special":
+        basicStats.totalTVSpecial++;
+        break;
+      case "cm":
+        basicStats.totalCM++;
+        break;
     }
 
     switch (status) {
@@ -186,12 +196,12 @@ export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<Ba
     }
   });
 
-  basicStats.averageScore /= averageScoreEligibleAnimeCount;
+  basicStats.averageScore = averageScoreEligibleAnimeCount ? basicStats.averageScore / averageScoreEligibleAnimeCount : 0;
 
-  basicStats.completed.averageScore /= basicStats.completed.count;
-  basicStats.dropped.averageScore /= basicStats.dropped.count;
-  basicStats.onHold.averageScore /= basicStats.onHold.count;
-  basicStats.watching.averageScore /= basicStats.watching.count;
+  basicStats.completed.averageScore = basicStats.completed.count ? basicStats.completed.averageScore / basicStats.completed.count : 0;
+  basicStats.dropped.averageScore = basicStats.dropped.count ? basicStats.dropped.averageScore / basicStats.dropped.count : 0;
+  basicStats.onHold.averageScore = basicStats.onHold.count ? basicStats.onHold.averageScore / basicStats.onHold.count : 0;
+  basicStats.watching.averageScore = basicStats.watching.count ? basicStats.watching.averageScore / basicStats.watching.count : 0;
 
   basicStats.grandTotalDuration = basicStats.totalDuration + basicStats.rewatchedDuration;
 
