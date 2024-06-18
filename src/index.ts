@@ -24,6 +24,8 @@ app.get('/health', async (c) => {
     { headers: { 'X-MAL-CLIENT-ID': c.env.MAL_CLIENT_ID } }
   );
 
+  console.log("Actual MAL response: ", await response.text());
+
   if (response.ok) {
     return c.json({ ok: true, services: ['mal'] });
   } else {
