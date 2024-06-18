@@ -1,6 +1,8 @@
 name = "anime-stats-backend"
 compatibility_date = "2024-05-13"
 
+main: ./src/index.ts
+
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
 # id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
