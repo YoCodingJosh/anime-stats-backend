@@ -15,4 +15,8 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          secrets: |
+            MAL_CLIENT_ID
+        env:
+          MAL_CLIENT_ID: ${{ secrets.MAL_CLIENT_ID }}
 
