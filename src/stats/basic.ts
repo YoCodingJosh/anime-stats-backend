@@ -186,7 +186,7 @@ export async function getBasicStats(watchlist: WatchlistDataRequest): Promise<Ba
         break;
       case "plan_to_watch":
         basicStats.planToWatch.count++;
-        basicStats.planToWatch.totalDuration += duration;
+        basicStats.planToWatch.totalDuration += node.num_episodes * node.average_episode_duration;
         break;
       case "watching":
         basicStats.watching.count++;

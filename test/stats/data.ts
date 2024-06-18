@@ -1,4 +1,4 @@
-import { WatchlistEndpointResponseNode, WatchlistEndpointResponseData, WatchlistDataRequest, ItemStatus, MediaType } from '../../schema';
+import { WatchlistEndpointResponseNode, WatchlistEndpointResponseData, WatchlistDataRequest, ItemStatus, MediaType } from '../../src/schema';
 
 export const gochiusa: WatchlistEndpointResponseNode = {
   id: "21273",
@@ -109,6 +109,45 @@ export const yuruCamp: WatchlistEndpointResponseNode = {
   num_scoring_users: 123,
 };
 
+export const hidamariSketch: WatchlistEndpointResponseNode = {
+  id: "1852",
+  title: "Hidamari Sketch",
+  main_picture: {
+    "medium": "https://cdn.myanimelist.net/images/anime/1893/133786.jpg",
+    "large": "https://cdn.myanimelist.net/images/anime/1893/133786l.jpg"
+  },
+  start_date: "2007-01-12",
+  end_date: "2007-03-30",
+  mean: 7.46,
+  rank: 2024,
+  popularity: 2403,
+  num_list_users: 80535,
+  num_scoring_users: 27251,
+  nsfw: "white",
+  created_at: "2007-01-17T07:01:35+00:00",
+  updated_at: "2023-09-12T22:24:24+00:00",
+  media_type: "tv",
+  status: "finished_airing",
+  genres: [
+    { id: 52, name: "CGDCT" },
+    { id: 63, name: "Iyashikei" },
+    { id: 23, name: "School" },
+    { id: 36, name: "Slice of Life" },
+    { id: 80, name: "Visual Arts" }
+  ],
+  num_episodes: 12,
+  start_season: {
+    year: 2007,
+    season: "winter"
+  },
+  source: "4_koma_manga",
+  average_episode_duration: 1440,
+  rating: "pg_13",
+  studios: [
+    { id: 44, name: "Shaft" }
+  ]
+}
+
 export const basicWatchlist: WatchlistEndpointResponseData[] = [
   { node: gochiusa, list_status: { status: 'completed', score: 10, num_episodes_watched: 12, is_rewatching: false, updated_at: Date.now().toString(), } },
   { node: naruto, list_status: { status: 'completed', score: 7, num_episodes_watched: 220, is_rewatching: false, updated_at: Date.now().toString(), } },
@@ -206,3 +245,9 @@ export const randomWatchlistGenerator = (length: number = 10): WatchlistEndpoint
 
   return watchlist;
 }
+
+export const slightlyMoreComplexAndRandomWatchlist: WatchlistEndpointResponseData[] = [
+  ...basicWatchlist,
+  { node: hidamariSketch, list_status: { status: 'completed', score: 10, num_episodes_watched: 12, is_rewatching: false, updated_at: Date.now().toString(), } },
+  ...randomWatchlistGenerator(3),
+];
