@@ -28,7 +28,7 @@ export interface WatchlistEndpointResponseNode {
   start_date: string;
   end_date: string;
   mean: number;
-  rank: number;
+  rank?: number;
   popularity: number;
   num_list_users: number;
   num_scoring_users: number;

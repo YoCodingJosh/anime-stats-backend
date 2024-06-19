@@ -3,6 +3,7 @@ import { WatchlistDataRequest } from "../schema";
 import { getBasicStats } from "./basic";
 import { getUnpopularOpinion } from "./unpopular_opinion";
 import { getStudioStats } from "./studios";
+import { getHentaiAlertStats } from "./hentai_alert";
 
 export interface Stat {
   /**
@@ -45,8 +46,8 @@ export const availableStats: Stat[] = [
   {
     id: "7DCDD014-1B7E-4EE9-A7DA-2BFD1C0FB93A",
     name: "Hentai Alert!",
-    description: "how much (if any) hentai you've watched",
-    calculate: async () => {},
+    description: "how much (if any) hentai and ecchi you've watched",
+    calculate: getHentaiAlertStats,
   },
 ];
 
