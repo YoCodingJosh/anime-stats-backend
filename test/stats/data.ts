@@ -1,4 +1,7 @@
-import { WatchlistEndpointResponseNode, WatchlistEndpointResponseData, WatchlistDataRequest, ItemStatus, MediaType } from '../../src/schema';
+import { WatchlistEndpointResponseNode, WatchlistEndpointResponseData, WatchlistDataRequest, ItemStatus, MediaType, NsfwStatus, AnimeStatus } from '../../src/schema';
+
+export const HENTAI_GENRE = { id: 12, name: 'Hentai' };
+export const ECCHI_GENRE = { id: 9, name: 'Ecchi' };
 
 export const gochiusa: WatchlistEndpointResponseNode = {
   id: "21273",
@@ -146,7 +149,67 @@ export const hidamariSketch: WatchlistEndpointResponseNode = {
   studios: [
     { id: 44, name: "Shaft" }
   ]
-}
+};
+
+export const kaedeToSuzu: WatchlistEndpointResponseNode = {
+  id: "50634",
+  title: "Love Me: Kaede to Suzu The Animation",
+  main_picture: {
+    medium: "https://cdn.myanimelist.net/images/anime/1881/120300.webp",
+    large: "https://cdn.myanimelist.net/images/anime/1881/120300l.webp"
+  },
+  start_date: "2022-03-25",
+  end_date: "2022-10-28",
+  mean: 7.87,
+  popularity: 5194,
+  num_list_users: 17191,
+  num_scoring_users: 7605,
+  nsfw: "gray",
+  created_at: "2021-12-22T14:49:02+00:00",
+  updated_at: "2022-12-05T08:24:42+00:00",
+  media_type: "ova",
+  status: "finished_airing",
+  genres: [ { id: 12, name: "Hentai" } ],
+  num_episodes: 2,
+  start_season: {
+    year: 2022,
+    season: "winter"
+  },
+  source: "manga",
+  average_episode_duration: 1605,
+  rating: "rx",
+  studios: [ { id: 1203, name: "Studio 1st" } ],
+};
+
+export const victorianMaid: WatchlistEndpointResponseNode = {
+  id: "30702",
+  title: "Victorian Maid Maria no Houshi",
+  main_picture: {
+    medium: "https://cdn.myanimelist.net/images/anime/4/73739.webp",
+    large: "https://cdn.myanimelist.net/images/anime/4/73739l.webp"
+  },
+  start_date: "2015-04-24",
+  end_date: "2015-04-24",
+  mean: 7.36,
+  popularity: 5739,
+  num_list_users: 13369,
+  num_scoring_users: 6450,
+  nsfw: "gray",
+  created_at: "2015-04-30T18:36:58+00:00",
+  updated_at: "2022-04-17T11:11:13+00:00",
+  media_type: "ova",
+  status: "finished_airing",
+  genres: [ { id: 12, name: "Hentai" } ],
+  num_episodes: 1,
+  start_season: {
+    year: 2015,
+    season: "spring"
+  },
+  source: "original",
+  average_episode_duration: 1440,
+  rating: "rx",
+  studios: [ { id: 755, name: "Jumondo" } ],
+};
 
 export const basicWatchlist: WatchlistEndpointResponseData[] = [
   { node: gochiusa, list_status: { status: 'completed', score: 10, num_episodes_watched: 12, is_rewatching: false, updated_at: Date.now().toString(), } },
@@ -158,7 +221,7 @@ export const transformWatchlistToDataRequest = (data: WatchlistEndpointResponseD
   return { data };
 }
 
-export const randomWatchlistGenerator = (length: number = 10): WatchlistEndpointResponseData[] => {
+export const randomWatchlistGenerator = (length: number = 10, shouldIncludeEcchi: boolean = true): WatchlistEndpointResponseData[] => {
   const watchlist: WatchlistEndpointResponseData[] = [];
 
   for (let i = 0; i < length; i++) {
@@ -172,6 +235,8 @@ export const randomWatchlistGenerator = (length: number = 10): WatchlistEndpoint
     const randomScore = Math.floor(Math.random() * 11);
 
     const randomNumEpisodes = Math.floor(Math.random() * 24) + 12;
+
+    var hasIncludedEcchi = !shouldIncludeEcchi;
 
     // try to guess which studios they reference :^)
     const fakeStudios = [
@@ -199,40 +264,50 @@ export const randomWatchlistGenerator = (length: number = 10): WatchlistEndpoint
       randomStudios.push(fakeStudios[Math.floor(Math.random() * fakeStudios.length)]);
     }
 
-    watchlist.push({
-      node: {
-        id: i.toString(),
-        title: `Anime ${i}`,
-        num_episodes: randomNumEpisodes,
-        start_season: {
-          year: Math.floor(Math.random() * 35) + 1989,
-          season: 'spring'
-        },
-        source: Math.random() > 0.5 ? 'manga' : 'light novel',
-        average_episode_duration: Math.floor(Math.random() * 24) + 12,
-        rating: 'pg',
-        studios: randomStudios,
-        genres: [
-          { id: 1, name: 'slice of life' },
-          { id: 2, name: 'comedy' }
-        ],
-        created_at: '2021-01-01T00:00:00Z',
-        updated_at: '2021-01-01T00:00:00Z',
-        main_picture: {
-          medium: 'https://cdn.myanimelist.net/images/anime/6/79600.jpg',
-          large: 'https://cdn.myanimelist.net/images/anime/6/79600l.jpg'
-        },
-        start_date: '2014-04-10',
-        end_date: '2014-06-26',
-        status: 'finished_airing',
-        mean: randomMean,
-        rank: 123,
-        popularity: 456,
-        num_list_users: 789,
-        nsfw: 'white',
-        num_scoring_users: 123,
-        media_type: randomMediaType,
+    const node = {
+      id: i.toString(),
+      title: `Anime ${i}`,
+      num_episodes: randomNumEpisodes,
+      start_season: {
+        year: Math.floor(Math.random() * 35) + 1989,
+        season: 'spring'
       },
+      source: Math.random() > 0.5 ? 'manga' : 'light novel',
+      average_episode_duration: Math.floor(Math.random() * 24) + 12,
+      rating: 'pg',
+      studios: randomStudios,
+      genres: [
+        { id: 36, name: 'Slice of Life' },
+        { id: 4, name: 'Comedy' },
+      ],
+      created_at: '2021-01-01T00:00:00Z',
+      updated_at: '2021-01-01T00:00:00Z',
+      main_picture: {
+        medium: 'https://cdn.myanimelist.net/images/anime/6/79600.jpg',
+        large: 'https://cdn.myanimelist.net/images/anime/6/79600l.jpg'
+      },
+      start_date: '2014-04-10',
+      end_date: '2014-06-26',
+      status: 'finished_airing' as AnimeStatus,
+      mean: randomMean,
+      rank: 123,
+      popularity: 456,
+      num_list_users: 789,
+      nsfw: 'white' as NsfwStatus,
+      num_scoring_users: 123,
+      media_type: randomMediaType,
+    };
+
+    if (shouldIncludeEcchi) {
+      // randomly include ecchi in the watchlist, but if at the last item (and not added yet), include it anyway
+      if (Math.random() > 0.5 || (!hasIncludedEcchi && i === length - 1)) {
+        node.genres.push({ id: 9, name: 'Ecchi' });
+        hasIncludedEcchi = true;
+      }
+    }
+
+    watchlist.push({
+      node: node,
       list_status: {
         status: randomStatus,
         score: randomScore,
@@ -250,4 +325,10 @@ export const slightlyMoreComplexAndRandomWatchlist: WatchlistEndpointResponseDat
   ...basicWatchlist,
   { node: hidamariSketch, list_status: { status: 'completed', score: 10, num_episodes_watched: 12, is_rewatching: false, updated_at: Date.now().toString(), } },
   ...randomWatchlistGenerator(3),
+];
+
+export const watchlistWithHentai: WatchlistEndpointResponseData[] = [
+  ...basicWatchlist,
+  { node: kaedeToSuzu, list_status: { status: 'completed', score: 10, num_episodes_watched: 2, is_rewatching: false, updated_at: Date.now().toString(), } },
+  { node: victorianMaid, list_status: { status: 'completed', score: 10, num_episodes_watched: 1, is_rewatching: false, updated_at: Date.now().toString(), } },
 ];
