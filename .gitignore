@@ -4,6 +4,6 @@ dist
 .dev.vars
 
 # Change them to your taste:
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+#package-lock.json
+#yarn.lock
+#pnpm-lock.yaml
